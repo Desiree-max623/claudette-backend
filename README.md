@@ -21,8 +21,11 @@ En esta etapa el repositorio contiene **solamente la estructura de carpetas y m�
 
 ## Módulos
 
+Todos los módulos van dentro de `src/modules/`.
+
 | Módulo | Para qué sirve | Lo usa en el frontend |
 |---|---|---|
+| `app` | Módulo principal, une a todos los demás | — |
 | `productos` | Alta, baja, edición y listado de productos | Catálogo, detalle de producto, admin de productos |
 | `categorias` | Remeras, vestidos, pantalones, abrigos y calzados | Páginas de categoría y filtros del catálogo |
 | `clientes` | Datos de las clientas y sus compras | Admin de clientes |
@@ -35,27 +38,29 @@ En esta etapa el repositorio contiene **solamente la estructura de carpetas y m�
 ```
 claudette-backend/
 ├── src/
-│   ├── auth/
-│   │   ├── dto/          # Datos que llegan en el login
-│   │   └── guards/       # Protección de rutas del admin
-│   ├── usuarios/
-│   │   ├── dto/
-│   │   └── entities/     # Cómo se guarda una administradora
-│   ├── productos/
-│   │   ├── dto/          # Datos para crear o editar un producto
-│   │   └── entities/     # Cómo se guarda un producto
-│   ├── categorias/
-│   │   ├── dto/
-│   │   └── entities/
-│   ├── clientes/
-│   │   ├── dto/
-│   │   └── entities/
-│   ├── contacto/
-│   │   ├── dto/          # Datos del formulario de contacto
-│   │   └── entities/
-│   ├── common/           # Piezas compartidas entre módulos
-│   └── config/           # Configuración general (variables de entorno, base de datos)
-├── test/                 # Pruebas
+│   ├── modules/
+│   │   ├── app/              # Módulo principal
+│   │   ├── auth/
+│   │   │   ├── dto/          # Datos que llegan en el login
+│   │   │   └── guards/       # Protección de rutas del admin
+│   │   ├── usuarios/
+│   │   │   ├── dto/
+│   │   │   └── entities/     # Cómo se guarda una administradora
+│   │   ├── productos/
+│   │   │   ├── dto/          # Datos para crear o editar un producto
+│   │   │   └── entities/     # Cómo se guarda un producto
+│   │   ├── categorias/
+│   │   │   ├── dto/
+│   │   │   └── entities/
+│   │   ├── clientes/
+│   │   │   ├── dto/
+│   │   │   └── entities/
+│   │   └── contacto/
+│   │       ├── dto/          # Datos del formulario de contacto
+│   │       └── entities/
+│   ├── common/               # Piezas compartidas entre módulos
+│   └── config/               # Configuración general (variables de entorno, base de datos)
+├── test/                     # Pruebas
 ├── .gitignore
 └── README.md
 ```
