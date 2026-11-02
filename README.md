@@ -1,6 +1,6 @@
 # Claudette — Backend
 
-API de **Claudette**, una tienda de ropa y accesorios de mujer de San Miguel de Tucumán. Este backend va a reemplazar los datos que hoy el frontend guarda en archivos locales y en el navegador (productos, clientes, login del administrador y formulario de contacto).
+API de **Claudette**, una tienda de ropa y accesorios de mujer de San Miguel de Tucumán. Este backend reemplaza los datos que hoy el frontend guarda en archivos locales y en el navegador: productos, categorías, clientes, login del administrador y formulario de contacto.
 
 Este es el **Repositorio N.º 3** del proyecto:
 
@@ -10,86 +10,135 @@ Este es el **Repositorio N.º 3** del proyecto:
 | 2 | [claudette-fronted](https://github.com/newton852161/claudette-fronted) | Migración del frontend a React + Vite |
 | 3 | [claudette-backend](https://github.com/Desiree-max623/claudette-backend) (este) | Backend con Nest.js |
 
-## Estado actual
+## Estado actual (TP N.º 9)
 
-En esta etapa el repositorio contiene **solamente la estructura de carpetas y módulos**, sin código. Las carpetas vacías tienen un archivo `.gitkeep` para que Git pueda subirlas (Git no guarda carpetas vacías). Esos archivos se borran cuando la carpeta tenga contenido real.
+El proyecto tiene la **estructura completa** generada con Nest CLI: un módulo por recurso, cada uno con su controlador, servicio, DTO y entidad. Los endpoints responden con los textos de ejemplo que genera Nest; **todavía no tienen lógica de negocio ni conexión a la base de datos**, como pide esta etapa.
 
-## Tecnologías previstas
+## Tecnologías
 
 - [Node.js](https://nodejs.org/) 20 o superior
 - [Nest.js](https://nestjs.com/) con TypeScript
+- [@nestjs/config](https://docs.nestjs.com/techniques/configuration) para leer el archivo `.env`
+- [PostgreSQL](https://www.postgresql.org/) como base de datos relacional
+- [Postman](https://www.postman.com/) para documentar y probar los endpoints
 
-## Módulos
+## Instalación y ejecución
 
-Todos los módulos van dentro de `src/modules/`.
+```bash
+git clone https://github.com/Desiree-max623/claudette-backend.git
+cd claudette-backend
+npm install
+cp .env.example .env     # y completar .env con los datos de cada uno
+npm run start:dev
+```
 
-| Módulo | Para qué sirve | Lo usa en el frontend |
+Después abrir `http://localhost:4000` en el navegador: tiene que aparecer **Hello World!**
+
+| Comando | Qué hace |
+|---|---|
+| `npm run start:dev` | Levanta el servidor y se reinicia solo al guardar cambios |
+| `npm run build` | Compila el proyecto en `dist/` |
+| `npm run start:prod` | Ejecuta la versión compilada |
+
+## Variables de entorno
+
+Las variables van en un archivo `.env` en la raíz del proyecto. Ese archivo **no se sube a GitHub** (está en el `.gitignore`) porque tiene contraseñas. En su lugar se sube **`.env.example`**, con los mismos nombres de variables y valores de ejemplo: cada integrante lo copia como `.env` y pone sus propios datos.
+
+| Variable | Para qué sirve | Ejemplo |
 |---|---|---|
-| `app` | Módulo principal, une a todos los demás | — |
-| `productos` | Alta, baja, edición y listado de productos | Catálogo, detalle de producto, admin de productos |
-| `categorias` | Remeras, vestidos, pantalones, abrigos y calzados | Páginas de categoría y filtros del catálogo |
-| `clientes` | Datos de las clientas y sus compras | Admin de clientes |
-| `usuarios` | Cuentas de las administradoras | Login del admin |
-| `auth` | Inicio de sesión y protección de rutas | Login y rutas protegidas del admin |
-| `contacto` | Consultas enviadas desde el formulario | Página de contacto |
+| `PORT` | Puerto donde corre la API | `4000` |
+| `DATABASE_URL` | Conexión a la base de datos | `postgresql://usuario:password@localhost:5432/claudette_db` |
+| `API_BASE_URL` | Dirección base de la API | `http://localhost:4000/` |
+
+## Módulos y endpoints
+
+Todos los módulos están en `src/modules/` y declarados en `imports` del `AppModule` (`src/modules/app/app.module.ts`). Cada recurso tiene las 5 operaciones CRUD:
+
+| Módulo | Ruta base | Lo usa en el frontend |
+|---|---|---|
+| `app` | `/` | Módulo principal: une a todos los demás |
+| `productos` | `/productos` | Catálogo, detalle de producto, admin de productos |
+| `categorias` | `/categorias` | Páginas de categoría y filtros del catálogo |
+| `clientes` | `/clientes` | Admin de clientes |
+| `usuarios` | `/usuarios` | Cuentas del admin |
+| `auth` | `/auth` | Login y rutas protegidas del admin |
+| `contacto` | `/contacto` | Formulario de contacto |
+
+| Método | Ruta | Acción |
+|---|---|---|
+| `GET` | `/productos` | Listar todos |
+| `GET` | `/productos/:id` | Ver uno |
+| `POST` | `/productos` | Crear |
+| `PATCH` | `/productos/:id` | Editar |
+| `DELETE` | `/productos/:id` | Borrar |
+
+(Lo mismo para cada módulo, cambiando la ruta base.)
 
 ## Estructura de carpetas
 
 ```
 claudette-backend/
+├── database/
+│   └── claudette.sql             # Tablas, relaciones y datos de ejemplo
+├── postman/
+│   └── claudette-backend.postman_collection.json
 ├── src/
-│   ├── modules/
-│   │   ├── app/              # Módulo principal
-│   │   ├── auth/
-│   │   │   ├── dto/          # Datos que llegan en el login
-│   │   │   └── guards/       # Protección de rutas del admin
-│   │   ├── usuarios/
-│   │   │   ├── dto/
-│   │   │   └── entities/     # Cómo se guarda una administradora
-│   │   ├── productos/
-│   │   │   ├── dto/          # Datos para crear o editar un producto
-│   │   │   └── entities/     # Cómo se guarda un producto
-│   │   ├── categorias/
-│   │   │   ├── dto/
-│   │   │   └── entities/
-│   │   ├── clientes/
-│   │   │   ├── dto/
-│   │   │   └── entities/
-│   │   └── contacto/
-│   │       ├── dto/          # Datos del formulario de contacto
-│   │       └── entities/
-│   ├── common/               # Piezas compartidas entre módulos
-│   └── config/               # Configuración general (variables de entorno, base de datos)
-├── test/                     # Pruebas
+│   ├── main.ts                   # Punto de entrada: arranca la aplicación
+│   └── modules/
+│       ├── app/                  # Módulo principal
+│       │   ├── app.controller.ts
+│       │   ├── app.module.ts     # Importa a todos los módulos
+│       │   └── app.service.ts
+│       ├── productos/
+│       │   ├── dto/              # Datos que llegan (crear / editar)
+│       │   ├── entities/         # Cómo es un producto
+│       │   ├── productos.controller.ts   # Recibe las peticiones (rutas)
+│       │   ├── productos.module.ts       # Une controlador y servicio
+│       │   └── productos.service.ts      # Acá irá la lógica
+│       ├── categorias/           # Misma estructura
+│       ├── clientes/
+│       ├── usuarios/
+│       ├── auth/
+│       └── contacto/
+├── test/                         # Pruebas
+├── .env.example                  # Modelo de variables de entorno
 ├── .gitignore
+├── nest-cli.json
+├── package.json
 └── README.md
 ```
+
+## Base de datos
+
+Se usa **PostgreSQL**. El script `database/claudette.sql` crea las tablas, sus relaciones y restricciones, y carga datos de ejemplo (los productos y categorías del frontend, más la categoría Accesorios). Todas las tablas tienen 5 registros o más.
+
+| Tabla | Qué guarda | Relaciones |
+|---|---|---|
+| `categorias` | Remeras, vestidos, pantalones, abrigos, calzado y accesorios | — |
+| `productos` | Productos de la tienda (con stock, destacado y estado Activo/Pausado) | `categoria_id` → `categorias` |
+| `talles` | S, M, L, 36 a 40 y Único | — |
+| `producto_talles` | Qué talles tiene cada producto | `producto_id` → `productos`, `talle_id` → `talles` |
+| `clientes` | Clientas | — |
+| `usuarios` | Cuentas del admin | — |
+| `consultas` | Mensajes del formulario de contacto | `cliente_id` → `clientes` (opcional) |
+
+Para crearla: en pgAdmin, crear la base `claudette_db`, abrir **Query Tool**, cargar `database/claudette.sql` y ejecutarlo. Al final muestra cuántos registros tiene cada tabla.
+
+## Pruebas con Postman
+
+La colección `postman/claudette-backend.postman_collection.json` tiene todos los endpoints organizados por módulo. Para usarla: en Postman, **Import** → elegir el archivo. Usa la variable `{{baseUrl}}` (por defecto `http://localhost:4000`).
 
 ## Forma de trabajo
 
 - `main`: versión estable. No se trabaja directo sobre esta rama.
 - `dev`: rama de integración. Todos los cambios llegan acá por Pull Request.
 - Ramas de trabajo, creadas siempre desde `dev`:
-  - `feature/...` para algo nuevo (ej. `feature/modulo-productos`)
-  - `refactor/...` para reorganizar sin cambiar lo que hace
-  - `fix/...` para corregir errores
-  - `docs/...` para documentación (ej. `docs/readme`)
+  - `feature/nombre-funcionalidad` para algo nuevo (ej. `feature/modulo-productos`)
+  - `fix/nombre-correccion` para corregir errores
+  - `refactor/nombre-cambio` para reorganizar o mejorar código
+  - `docs/nombre-documentacion` para documentación
 
-Pasos para colaborar:
-
-```bash
-git clone https://github.com/Desiree-max623/claudette-backend.git
-cd claudette-backend
-git checkout dev
-git pull
-git checkout -b feature/nombre-de-la-tarea
-# ...hacer los cambios...
-git add .
-git commit -m "feat: descripción corta"
-git push -u origin feature/nombre-de-la-tarea
-```
-
-Después se abre un Pull Request hacia `dev` en GitHub y otra persona del equipo lo revisa antes de unirlo.
+Cada Pull Request lo revisa y aprueba **otro** integrante del equipo.
 
 ## Equipo — Comisión 6
 
