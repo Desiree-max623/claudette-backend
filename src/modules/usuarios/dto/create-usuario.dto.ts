@@ -2,14 +2,14 @@ import { IsString, IsNotEmpty, IsEmail, MinLength, IsIn, IsOptional } from 'clas
 export class CreateUsuarioDto {
   @IsString()
   @IsNotEmpty()
-  nombre!: string;
+  nombre: string;
 
   @IsEmail()
-  email!: string;
+  email: string;
 
   @IsString()
   @MinLength(6)
-  password!: string;
+  password: string;
 
   @IsOptional()
   @IsIn(['admin', 'editor'])
