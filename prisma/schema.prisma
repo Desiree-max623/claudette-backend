@@ -1,0 +1,86 @@
+// Esquema de Prisma de Claudette.
+// Cada "model" representa una tabla de la base de datos.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Categoria {
+  id        Int        @id @default(autoincrement())
+  slug      String     @unique @db.VarChar(50)
+  nombre    String     @db.VarChar(100)
+  productos Producto[]
+}
+
+model Talle {
+  id           Int           @id @default(autoincrement())
+  nombre       String        @unique @db.VarChar(10)
+  productos    Producto[]
+  itemsCarrito ItemCarrito[]
+}
+
+model Producto {
+  id           Int           @id @default(autoincrement())
+  nombre       String        @db.VarChar(100)
+  precio       Int
+  imagen       String?       @db.VarChar(255)
+  descripcion  String?
+  stock        Int           @default(0)
+  destacado    Boolean       @default(false)
+  activo       Boolean       @default(true)
+  categoriaId  Int
+  categoria    Categoria     @relation(fields: [categoriaId], references: [id])
+  talles       Talle[]
+  itemsCarrito ItemCarrito[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Usuario {
+  id        Int       @id @default(autoincrement())
+  nombre    String    @db.VarChar(100)
+  email     String    @unique @db.VarChar(150)
+  password  String    @db.VarChar(255)
+  rol       String    @default("cliente") @db.VarChar(20)
+  carritos  Carrito[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Carrito {
+  id        Int           @id @default(autoincrement())
+  usuarioId Int
+  usuario   Usuario       @relation(fields: [usuarioId], references: [id])
+  estado    String        @default("activo") @db.VarChar(20)
+  items     ItemCarrito[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}
+
+model ItemCarrito {
+  id             Int      @id @default(autoincrement())
+  carritoId      Int
+  carrito        Carrito  @relation(fields: [carritoId], references: [id], onDelete: Cascade)
+  productoId     Int
+  producto       Producto @relation(fields: [productoId], references: [id])
+  talleId        Int
+  talle          Talle    @relation(fields: [talleId], references: [id])
+  cantidad       Int
+  precioUnitario Int
+}
+
+model Contacto {
+  id        Int      @id @default(autoincrement())
+  nombre    String   @db.VarChar(100)
+  email     String   @db.VarChar(150)
+  telefono  String?  @db.VarChar(30)
+  motivo    String   @db.VarChar(20)
+  mensaje   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
