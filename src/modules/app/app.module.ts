@@ -7,10 +7,12 @@ import { CategoriasModule } from '../categorias/categorias.module.js';
 import { UsuariosModule } from '../usuarios/usuarios.module.js';
 import { CarritoModule } from '../carrito/carrito.module.js';
 import { ContactoModule } from '../contacto/contacto.module.js';
+import { PrismaModule } from '../prisma/prisma.module.js';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    PrismaModule,
     ProductosModule,
     CategoriasModule,
     UsuariosModule,
