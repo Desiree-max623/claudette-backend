@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe } from '@nestjs/common';
 import { ContactoService } from './contacto.service.js';
 import { CreateContactoDto } from './dto/create-contacto.dto.js';
 import { UpdateContactoDto } from './dto/update-contacto.dto.js';
@@ -18,17 +18,17 @@ export class ContactoController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.contactoService.findOne(+id);
+  findOne(@Param('id', ParseIntPipe) id: number) {
+    return this.contactoService.findOne(id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateContactoDto: UpdateContactoDto) {
-    return this.contactoService.update(+id, updateContactoDto);
+  update(@Param('id', ParseIntPipe) id: number, @Body() updateContactoDto: UpdateContactoDto) {
+    return this.contactoService.update(id, updateContactoDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.contactoService.remove(+id);
+  remove(@Param('id', ParseIntPipe) id: number) {
+    return this.contactoService.remove(id);
   }
 }
