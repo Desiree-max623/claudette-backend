@@ -8,7 +8,7 @@ import { UsuariosModule } from '../usuarios/usuarios.module.js';
 import { CarritoModule } from '../carrito/carrito.module.js';
 import { ContactoModule } from '../contacto/contacto.module.js';
 import { PrismaModule } from '../prisma/prisma.module.js';
-
+import { AuthModule } from '../auth/auth.module.js';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -18,7 +18,7 @@ import { PrismaModule } from '../prisma/prisma.module.js';
     UsuariosModule,
     CarritoModule,
     ContactoModule,
-    
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
