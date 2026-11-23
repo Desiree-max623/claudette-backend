@@ -22,3 +22,7 @@ lerna-debug.log*
 # temp directory
 .temp
 .tmp
+*.tsbuildinfo
+
+# Prisma Client generado (se crea con npx prisma generate)
+/src/generated/prisma
